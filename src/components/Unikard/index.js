@@ -48,7 +48,7 @@ class Unikard extends PureComponent<Props, State> {
         let label = unikname.resolver.label;
         let coinSupportedLabel = label === 'default' ? '' : `by #${label}`;
 
-        let supportedCoins = unikname.supportedTypes.map((type)=>`${type.label}`).join(' - ')
+        let supportedCoins = unikname.supportedTypes.map((type)=>`${type.type}`).join(' - ')
 
         return (
             <Box flow={1} style={style.card}>

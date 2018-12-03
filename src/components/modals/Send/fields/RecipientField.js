@@ -102,10 +102,24 @@ class RecipientField<Transaction> extends Component<
     let recepient = unikname.split('#');
 
     let explicit = recepient[0].substr(1);
-    let label = recepient[1];
+    let label = recepient[1] ? recepient[1] : "default";
     let type = account.currency.ticker ;
 
-    let promise = network({ method: 'GET', url: `http://localhost:3000/uniknames/${explicit}/labels/${label}/types/${type}` })
+    let headers = {
+      Pragma: undefined,
+      'Cache-Control': undefined,
+      'X-Requested-With': undefined,
+      'If-Modified-Since': undefined,
+      'x-pm-appversion': undefined,
+      'x-pm-uid': undefined,
+      'x-pm-apiversion': undefined,
+      'Authorization': `Basic bob`
+
+    };
+
+    let promise = network({ method: 'GET', url: `http://localhost:3000/uniknames/${explicit}/labels/${label}/types/${type}` ,headers:{
+
+    }})
 
     const { data, status } = await promise
 
