@@ -61,7 +61,7 @@ class Unikard extends PureComponent<Props, State> {
                             <span className="stars">{stars}</span>
                         </div>
                     </Box>
-                    <Box vertical className="types">
+                    <Box vertical flow={2} className="types">
                         <h2>Types supported {coinSupportedLabel}</h2>
                         <div> 
                             {supportedCoins}
