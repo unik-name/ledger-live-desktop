@@ -1,0 +1,121 @@
+.unikard{
+    background-color: #2A2B82;
+    color: #fff;
+    border-radius:20px;
+}
+
+
+.unikard .header {
+    font-size: 1.5em;
+  color: #fff;
+  font-weight: bold;
+  background-color: #201c60;
+  padding: 1rem 1rem 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.unikard .header .profile_picture img{
+    border-radius: 50%;
+    height: 45px;
+    width: 45px;
+    margin-right: 1rem;
+}
+
+.unikard .header .profile_picture{
+    position: relative;
+}
+
+.unikard .header .profile_picture:after {
+  position: absolute;
+  bottom: 0px;
+  right: 8px;
+  content: "👤";
+  font-weight: bold;
+  font-size: 0.8em;
+  color: #fff;
+}
+
+.unikard .header .profile_picture.indiv:after {
+    content: "👤";
+}
+  
+.unikard .header .profile_picture.team:after {
+    content: "👥";
+}
+
+.unikard .header .profile_picture.corp:after {
+    content: "🏢";
+}
+
+.unikard .header .profile_picture.gov:after {
+    content: "🌍";
+}
+
+.unikard .body{
+    padding: 0rem 1.5rem 0.5rem 1.5rem;
+}
+  
+  .unikard .body .security {
+    padding: 1rem;
+    display: flex;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 1rem;
+    font-size: 1.2em;
+    font-weight: 600;
+    flex-direction: row;
+  }
+  
+  .unikard .body .security .trust {
+    display: flex;
+  }
+  
+  .unikard .body .security .trust .stars {
+      display: flex;
+      margin-left: 0.25rem;
+  }
+  
+
+  .unikard .body .types {
+    margin-top: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-flow: row wrap;
+    display: flex;
+}
+
+.unikard .body .types div{
+    margin-top: 15px;
+}
+  
+.unikard .body .types .type {
+    background-color: #fff;
+    color: #000;
+    margin: 0.5rem 0rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 30px;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-right: 1rem;
+  }
+
+  .unikard .body .types .type img {
+    margin-right: 0.5rem;
+  }
+  
+  .unikard .footer {
+    text-align: center;
+    margin-bottom: 0px;
+    font-size: 0.8em;
+  }
+  
+  .unikard .footer  a,
+  .unikard .footer  a:hover,
+  .unikard .footer  a:active,
+  .unikard .footer  a:focus {
+    color: #fff;
+    text-decoration: none;
+  }
