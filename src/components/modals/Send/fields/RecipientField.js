@@ -38,7 +38,8 @@ class RecipientField<Transaction> extends Component<
     isValid: true,
     warning: null,
     QRCodeRefusedReason: null,
-    unikname:null
+    unikname:null,
+    resolverErrorMsg:null
   }
   componentDidMount() {
     this.resync()
@@ -105,32 +106,48 @@ class RecipientField<Transaction> extends Component<
     let label = recepient[1] ? recepient[1] : "default";
     let type = account.currency.ticker ;
 
-    let headers = {
-      Pragma: undefined,
-      'Cache-Control': undefined,
-      'X-Requested-With': undefined,
-      'If-Modified-Since': undefined,
-      'x-pm-appversion': undefined,
-      'x-pm-uid': undefined,
-      'x-pm-apiversion': undefined,
-      'Authorization': `Basic bob`
 
-    };
+    let status,data;
+    try{
 
-    let promise = network({ method: 'GET', url: `http://localhost:3000/uniknames/${explicit}/labels/${label}/types/${type}` ,headers:{
+      let prefixIndex = account.name ? account.name.indexOf('@') : -1;
+      let headers = prefixIndex === 0 ? {'Authorization': `Basic ${account.name.substr(1).split('#')[0]}`} : undefined
 
-    }})
+      let result = await network({ method: 'GET', url: `http://localhost:3000/uniknames/${explicit}/labels/${label}/types/${type}` ,headers})
 
-    const { data, status } = await promise
+      status = result.status;
+      data = result.data;
 
-    console.log("code",status)
-    console.log("data",data);
-    if (data) {
-      this.setState({ unikname: data })
-      let t = bridge.editTransactionRecipient(account, transaction, data.resolver.address)
-      onChangeTransaction(t)
+      console.log("code",status)
+      console.log("data",data);
+
+    }catch(error){
+      console.error("network promise",error)
+      status = error.status;
+    }    
+
+
+    switch (status){
+      case 200:
+        if (data) {
+          this.setState({ resolverErrorMsg:null,unikname: data })
+          let t = bridge.editTransactionRecipient(account, transaction, data.resolver.address)
+          onChangeTransaction(t)
+        } else{
+          console.error("no data");
+        }
+        break;
+      case 404:
+        this.setState({ resolverErrorMsg: "@unik-name could't be resolved" })
+      break;
+      case 403:
+        this.setState({ resolverErrorMsg: "You're not authorized by @unik-name's owner" })
+      break;
+      case 401:
+        this.setState({ resolverErrorMsg: "You need a @unik-name to resolve" })
+      break;
     }
-    
+
   }
 
   handleRecipientAddressHelp = () => {
@@ -139,7 +156,7 @@ class RecipientField<Transaction> extends Component<
   }
   render() {
     const { bridge, account, transaction, autoFocus } = this.props
-    const { isValid, warning, QRCodeRefusedReason,unikname } = this.state
+    const { isValid, warning, QRCodeRefusedReason,unikname, resolverErrorMsg } = this.state
 
     let recipient = bridge.getTransactionRecipient(account, transaction)
     if( unikname ){
@@ -156,6 +173,9 @@ class RecipientField<Transaction> extends Component<
       !value || isValid
         ? QRCodeRefusedReason
         : new InvalidAddress(null, { currencyName: account.currency.name })
+
+
+    let resolverError = resolverErrorMsg ? (<span style={{color:'red'}} >{resolverErrorMsg}</span>) : null;
 
     let resolvedAddress = unikname ? <LabelWithExternalIcon label={`Resolved address : ${unikname.resolver.address}`}/> : null;
     let unikard = unikname ? <Unikard unikname={unikname}/> : null
@@ -175,6 +195,7 @@ class RecipientField<Transaction> extends Component<
             onChange={this.onChange}
             onBlur={this.onBlur}
           />
+          {resolverError}
           {resolvedAddress}
           {unikard}
         </Box>
